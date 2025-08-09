@@ -1,0 +1,91 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Welcome to Online Exam System
+        </div>
+        <div class="card-body">
+            <% if (user) { %>
+                <h2>Hello, <%= user.name %>!</h2>
+                <p class="mb-2">Welcome back to the Online Exam System.</p>
+                
+                <% if (user.role === 'admin') { %>
+                    <p>As an admin, you can manage questions, view results, and oversee the examination process.</p>
+                    <div class="d-flex gap-1">
+                        <a href="/admin/dashboard" class="btn btn-primary">Go to Admin Dashboard</a>
+                        <a href="/admin/questions" class="btn btn-secondary">Manage Questions</a>
+                    </div>
+                <% } else { %>
+                    <p>Ready to take your exam? Access your dashboard to start.</p>
+                    <div class="d-flex gap-1">
+                        <a href="/exam/dashboard" class="btn btn-primary">Go to Dashboard</a>
+                        <a href="/exam/start" class="btn btn-success">Start Exam</a>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <h2>Welcome to the Online Examination Platform</h2>
+                <p class="mb-2">A comprehensive examination system designed for both students and administrators.</p>
+                
+                <div class="stats-grid mb-2">
+                    <div class="stat-card">
+                        <span class="stat-number">📝</span>
+                        <div class="stat-label">Take Exams Online</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">⏱️</span>
+                        <div class="stat-label">Timed Examinations</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">📊</span>
+                        <div class="stat-label">Instant Results</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">🛡️</span>
+                        <div class="stat-label">Secure Platform</div>
+                    </div>
+                </div>
+                
+                <h3>Features</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                    <div>
+                        <h4>For Students</h4>
+                        <ul style="list-style-type: none; padding: 0;">
+                            <li>✅ User-friendly registration and login</li>
+                            <li>✅ Timed examinations with countdown</li>
+                            <li>✅ One question per page interface</li>
+                            <li>✅ Auto-save answers</li>
+                            <li>✅ Instant results and scoring</li>
+                            <li>✅ Exam history tracking</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>For Administrators</h4>
+                        <ul style="list-style-type: none; padding: 0;">
+                            <li>✅ Question bank management</li>
+                            <li>✅ Multiple choice questions (MCQs)</li>
+                            <li>✅ Exam duration settings</li>
+                            <li>✅ Student results overview</li>
+                            <li>✅ Performance analytics</li>
+                            <li>✅ User management</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <h3>Get Started</h3>
+                    <p>Join thousands of students and educators using our platform</p>
+                    <div class="d-flex justify-content-center gap-1">
+                        <a href="/register" class="btn btn-primary">Register as Student</a>
+                        <a href="/login" class="btn btn-secondary">Login</a>
+                    </div>
+                    <p class="mt-1" style="font-size: 0.9rem; color: #666;">
+                        Demo Accounts - Admin: admin@exam.com / admin123 | Student: student@exam.com / student123
+                    </p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

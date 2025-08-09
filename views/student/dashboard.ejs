@@ -1,0 +1,112 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <h1>Student Dashboard</h1>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number"><%= totalQuestions %></span>
+            <div class="stat-label">Questions Available</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number"><%= examHistory.length %></span>
+            <div class="stat-label">Exams Taken</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number"><%= bestScore %>%</span>
+            <div class="stat-label">Best Score</div>
+        </div>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        <div class="card">
+            <div class="card-header">
+                Start Exam
+            </div>
+            <div class="card-body">
+                <% if (totalQuestions > 0) { %>
+                    <p>Ready to take the exam? Click the button below to start.</p>
+                    <div class="alert alert-warning">
+                        <strong>Important:</strong>
+                        <ul style="margin: 0.5rem 0 0 1rem;">
+                            <li>The exam has a time limit of 60 minutes</li>
+                            <li>You can navigate between questions</li>
+                            <li>Your answers are automatically saved</li>
+                            <li>The exam will auto-submit when time expires</li>
+                        </ul>
+                    </div>
+                    <a href="/exam/start" class="btn btn-success" style="width: 100%;">
+                        Start Exam
+                    </a>
+                <% } else { %>
+                    <p style="color: #666;">No questions are available for examination at this time.</p>
+                    <p>Please contact your administrator.</p>
+                <% } %>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                Exam History
+            </div>
+            <div class="card-body">
+                <% if (hasExamHistory) { %>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Score</th>
+                                    <th>Percentage</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% examHistory.forEach(result => { %>
+                                    <tr>
+                                        <td><%= result.correctAnswers %>/<%= result.totalQuestions %></td>
+                                        <td><%= result.percentage %>%</td>
+                                        <td><%= result.createdAt.toLocaleDateString() %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-center" style="color: #666;">No exam history yet. Take your first exam to see results here.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            How It Works
+        </div>
+        <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                    <h4>Take the Exam</h4>
+                    <p>Answer multiple choice questions one by one with a timer counting down.</p>
+                </div>
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💾</div>
+                    <h4>Auto-Save</h4>
+                    <p>Your answers are automatically saved as you progress through the exam.</p>
+                </div>
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+                    <h4>Get Results</h4>
+                    <p>View your score, percentage, and grade immediately after submission.</p>
+                </div>
+                <div class="text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
+                    <h4>Track Progress</h4>
+                    <p>Monitor your performance over time with exam history.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

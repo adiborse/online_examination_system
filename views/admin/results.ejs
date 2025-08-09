@@ -1,0 +1,110 @@
+<%- include('../partials/header') %>
+
+<div class="container admin-dashboard">
+    <h1>Exam Results</h1>
+    
+    <div class="stats-grid mb-2">
+        <div class="stat-card">
+            <span class="stat-number"><%= stats.averageScore.toFixed(1) %>%</span>
+            <div class="stat-label">Average Score</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number"><%= stats.highestScore %>%</span>
+            <div class="stat-label">Highest Score</div>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number"><%= stats.lowestScore %>%</span>
+            <div class="stat-label">Lowest Score</div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            All Exam Results
+        </div>
+        <div class="card-body">
+            <% if (results.length > 0) { %>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Email</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Time Spent</th>
+                                <th>Date</th>
+                                <th>Submission</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% results.forEach(result => { %>
+                                <tr>
+                                    <td><%= result.userId.name %></td>
+                                    <td><%= result.userId.email %></td>
+                                    <td><%= result.correctAnswers %>/<%= result.totalQuestions %></td>
+                                    <td><%= result.percentage %>%</td>
+                                    <td>
+                                        <span style="
+                                            padding: 0.25rem 0.5rem;
+                                            border-radius: 3px;
+                                            font-size: 0.75rem;
+                                            font-weight: bold;
+                                            color: white;
+                                            background-color: <%= result.grade === 'A+' || result.grade === 'A' ? '#28a745' : result.grade === 'B' ? '#ffc107' : result.grade === 'C' || result.grade === 'D' ? '#fd7e14' : '#dc3545' %>;
+                                        ">
+                                            <%= result.grade %>
+                                        </span>
+                                    </td>
+                                    <td><%= Math.floor(result.timeSpent / 60) %>m <%= result.timeSpent % 60 %>s</td>
+                                    <td><%= result.createdAt.toLocaleDateString() %></td>
+                                    <td>
+                                        <span style="
+                                            padding: 0.25rem 0.5rem;
+                                            border-radius: 3px;
+                                            font-size: 0.75rem;
+                                            background-color: <%= result.submissionType === 'manual' ? '#e3f2fd' : '#fff3e0' %>;
+                                            color: <%= result.submissionType === 'manual' ? '#1976d2' : '#f57c00' %>;
+                                        ">
+                                            <%= result.submissionType === 'manual' ? 'Manual' : 'Auto' %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <% if (totalPages > 1) { %>
+                    <div class="pagination">
+                        <% if (hasPrev) { %>
+                            <a href="/admin/results?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+                        <% } %>
+                        
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <% if (i === currentPage) { %>
+                                <span class="current"><%= i %></span>
+                            <% } else { %>
+                                <a href="/admin/results?page=<%= i %>"><%= i %></a>
+                            <% } %>
+                        <% } %>
+                        
+                        <% if (hasNext) { %>
+                            <a href="/admin/results?page=<%= currentPage + 1 %>">Next &raquo;</a>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <div class="text-center" style="padding: 3rem;">
+                    <h3>No Results Found</h3>
+                    <p style="color: #666;">No students have taken the exam yet.</p>
+                    <a href="/admin/dashboard" class="btn btn-primary">Back to Dashboard</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

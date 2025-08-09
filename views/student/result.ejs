@@ -1,0 +1,140 @@
+<%- include('../partials/header') %>
+
+<div class="container">
+    <div class="text-center mb-2">
+        <h1>Exam Result</h1>
+        <p>Congratulations! You have completed the exam.</p>
+    </div>
+    
+    <div class="result-summary">
+        <div class="result-item">
+            <span class="result-value"><%= result.correctAnswers %></span>
+            <div class="result-label">Correct Answers</div>
+        </div>
+        <div class="result-item">
+            <span class="result-value"><%= result.totalQuestions %></span>
+            <div class="result-label">Total Questions</div>
+        </div>
+        <div class="result-item">
+            <span class="result-value"><%= result.percentage %>%</span>
+            <div class="result-label">Percentage</div>
+        </div>
+        <div class="result-item">
+            <span class="result-value"><%= Math.floor(result.timeSpent / 60) %>m <%= result.timeSpent % 60 %>s</span>
+            <div class="result-label">Time Spent</div>
+        </div>
+    </div>
+    
+    <div class="text-center mb-2">
+        <div class="grade <%= result.grade.replace('+', '-plus') %>">
+            <%= result.grade %>
+        </div>
+        <h2>Grade: <%= result.grade %></h2>
+        <p style="font-size: 1.2rem;">
+            <% if (result.percentage >= 90) { %>
+                Excellent work! Outstanding performance.
+            <% } else if (result.percentage >= 80) { %>
+                Great job! Very good performance.
+            <% } else if (result.percentage >= 70) { %>
+                Good work! Above average performance.
+            <% } else if (result.percentage >= 60) { %>
+                Fair performance. Room for improvement.
+            <% } else if (result.percentage >= 50) { %>
+                Below average. Consider studying more.
+            <% } else { %>
+                Needs significant improvement. Please study and retake.
+            <% } %>
+        </p>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            Detailed Results
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">Q#</th>
+                            <th>Question</th>
+                            <th>Your Answer</th>
+                            <th>Correct Answer</th>
+                            <th style="width: 100px;">Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% result.questions.forEach((questionResult, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td style="max-width: 300px;">
+                                    <%= questionResult.questionId.question %>
+                                </td>
+                                <td>
+                                    <% if (questionResult.selectedAnswer !== null && questionResult.selectedAnswer !== undefined) { %>
+                                        <%= String.fromCharCode(65 + questionResult.selectedAnswer) %>. <%= questionResult.questionId.options[questionResult.selectedAnswer] %>
+                                    <% } else { %>
+                                        <span style="color: #999;">Not answered</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <%= String.fromCharCode(65 + questionResult.correctAnswer) %>. <%= questionResult.questionId.options[questionResult.correctAnswer] %>
+                                </td>
+                                <td>
+                                    <% if (questionResult.isCorrect) { %>
+                                        <span style="color: #28a745; font-weight: bold;">✓ Correct</span>
+                                    <% } else { %>
+                                        <span style="color: #dc3545; font-weight: bold;">✗ Incorrect</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-2">
+        <div class="d-flex justify-content-center gap-1">
+            <a href="/exam/dashboard" class="btn btn-primary">Back to Dashboard</a>
+            <a href="/exam/start" class="btn btn-success">Take Another Exam</a>
+        </div>
+    </div>
+    
+    <div class="card mt-2">
+        <div class="card-header">
+            Performance Analysis
+        </div>
+        <div class="card-body">
+            <% 
+                const totalCorrect = result.correctAnswers;
+                const totalQuestions = result.totalQuestions;
+                const accuracy = ((totalCorrect / totalQuestions) * 100).toFixed(1);
+            %>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                <div class="text-center">
+                    <h4>Accuracy Rate</h4>
+                    <div style="font-size: 2rem; font-weight: bold; color: #667eea;"><%= accuracy %>%</div>
+                    <p>Questions answered correctly</p>
+                </div>
+                <div class="text-center">
+                    <h4>Completion Time</h4>
+                    <div style="font-size: 2rem; font-weight: bold; color: #667eea;">
+                        <%= Math.floor(result.timeSpent / 60) %>:<%= (result.timeSpent % 60).toString().padStart(2, '0') %>
+                    </div>
+                    <p>Out of <%= result.examDuration %> minutes allowed</p>
+                </div>
+                <div class="text-center">
+                    <h4>Submission Type</h4>
+                    <div style="font-size: 2rem; font-weight: bold; color: #667eea;">
+                        <%= result.submissionType === 'manual' ? '👤' : '⏰' %>
+                    </div>
+                    <p><%= result.submissionType === 'manual' ? 'Manual submission' : 'Auto-submitted (time expired)' %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

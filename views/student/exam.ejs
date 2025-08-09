@@ -1,0 +1,69 @@
+<%- include('../partials/header') %>
+
+<div class="container exam-container">
+    <div class="exam-header">
+        <div class="question-counter">
+            Question <%= currentIndex + 1 %> of <%= totalQuestions %>
+        </div>
+        <div id="timer" class="timer" data-time="<%= timeRemaining * 60 %>">
+            <%= Math.floor(timeRemaining) %>:00
+        </div>
+    </div>
+    
+    <div class="question-card">
+        <div class="question-text">
+            <%= question.question %>
+        </div>
+        
+        <form>
+            <input type="hidden" name="questionId" value="<%= question.id %>">
+            
+            <ul class="options-list">
+                <% question.options.forEach((option, index) => { %>
+                    <li class="option-item">
+                        <label class="option-label <%= selectedAnswer === index ? 'selected' : '' %>">
+                            <input type="radio" name="answer" value="<%= index %>" class="option-input" <%= selectedAnswer === index ? 'checked' : '' %>>
+                            <span class="option-text">
+                                <%= String.fromCharCode(65 + index) %>. <%= option %>
+                            </span>
+                        </label>
+                    </li>
+                <% }) %>
+            </ul>
+        </form>
+    </div>
+    
+    <div class="exam-navigation">
+        <% if (currentIndex > 0) { %>
+            <button id="prevBtn" class="btn btn-secondary">
+                &laquo; Previous
+            </button>
+        <% } else { %>
+            <div></div>
+        <% } %>
+        
+        <div class="d-flex gap-1">
+            <% if (!isLastQuestion) { %>
+                <button id="nextBtn" class="btn btn-primary">
+                    Next &raquo;
+                </button>
+            <% } %>
+            <button id="submitBtn" class="btn btn-success">
+                Submit Exam
+            </button>
+        </div>
+    </div>
+    
+    <div class="alert alert-warning mt-2">
+        <strong>Instructions:</strong>
+        <ul style="margin: 0.5rem 0 0 1rem;">
+            <li>Select one answer for each question</li>
+            <li>You can navigate between questions using Previous/Next buttons</li>
+            <li>Your answers are automatically saved</li>
+            <li>You can submit the exam at any time</li>
+            <li>The exam will auto-submit when time expires</li>
+        </ul>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>
